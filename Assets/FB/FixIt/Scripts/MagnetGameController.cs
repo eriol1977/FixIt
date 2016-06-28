@@ -70,12 +70,14 @@ namespace fb.fixit
 			if (matches.Count > 0) {
 				magnetController.matches = matches;
 				magnetController.status = MagnetController.STATUS.NORMAL;
+				selected.GetComponent<Collider> ().isTrigger = true;
 				magnetController.enabled = true;
 			}
 		}
 
 		private void HandleObjectDeselected (GameObject deselected)
 		{
+			deselected.GetComponent<Collider> ().isTrigger = false;
 			magnetController.enabled = false;
 		}
 

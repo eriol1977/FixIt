@@ -73,12 +73,14 @@ namespace fb.fixit
 			}
 		}
 
-		void DeselectObject ()
+		public void DeselectObject ()
 		{
-			selected.GetComponent<Rigidbody> ().isKinematic = false;
-			OnObjectDeselected (selected);
-			selected = null;
-			zoom = 3f;
+			if (selected != null) {
+				selected.GetComponent<Rigidbody> ().isKinematic = false;
+				OnObjectDeselected (selected);
+				selected = null;
+				zoom = 3f;
+			}
 		}
 
 		private static int GetLayerMask (params string[] layerNames)
