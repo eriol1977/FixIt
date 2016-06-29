@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
+// Sends an event with the two colliding objects, every time a trigger is activated on this object
 public class LimitTrigger : MonoBehaviour
 {
 	public event Action<GameObject,GameObject> OnLimitTriggered;
