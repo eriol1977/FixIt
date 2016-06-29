@@ -4,6 +4,12 @@ using System.Collections;
 
 namespace fb.fixit
 {
+	// A basic movement controller:
+	// - a left click on any object belonging to the "Selectable" layer selects it
+	// - a right click deselects the presently selected object
+	// - moving the mouse with an object selected moves the object around on the X and Y axes
+	// - scrolling the mouse wheel with an object selected moves the object along the Z axes
+	// - the arrow keys rotate the selected object around two of its axes
 	public class MoveControllerNoVR : AbsMovementController
 	{
 		public MagnetController magnetController;
@@ -18,15 +24,16 @@ namespace fb.fixit
 
 		void OnEnable ()
 		{
+			// FIXME
 			magnetController.OnMagnetsJoining += HandleMagnetsJoining;
 		}
 
 		void OnDisable ()
 		{
+			// FIXME
 			magnetController.OnMagnetsJoining -= HandleMagnetsJoining;
 		}
 
-		// Use this for initialization
 		void Start ()
 		{
 			zoom = 3f;
@@ -63,6 +70,8 @@ namespace fb.fixit
 				RaycastHit hit;
 				if (Physics.Raycast (rayOrigin, out hit, 200f, GetLayerMask ("Selectable"))) {
 					selected = hit.collider.gameObject;
+					
+					// the selected object turns kinematic so that we can move it around
 					selected.GetComponent<Rigidbody> ().isKinematic = true;
 
 					OnObjectSelected (selected);
@@ -76,6 +85,7 @@ namespace fb.fixit
 		public void DeselectObject ()
 		{
 			if (selected != null) {
+				// the deselected object turns not kinematic so that it falls and responds to physical forces
 				selected.GetComponent<Rigidbody> ().isKinematic = false;
 				OnObjectDeselected (selected);
 				selected = null;
@@ -92,6 +102,7 @@ namespace fb.fixit
 			return mask;
 		}
 
+		// FIXME
 		private void HandleMagnetsJoining ()
 		{
 			selected = null;
