@@ -13,8 +13,6 @@ namespace fb.fixit
 
 		public Magnet movingMagnetToJoin;
 
-		public LimitTrigger limitTrigger;
-
 		private float distanceThreshold = 0.5f;
 
 		private Vector3 rotationThreshold = new Vector3 (5, 5, 5);
@@ -22,8 +20,6 @@ namespace fb.fixit
 		public event Action OnMagnetsJoining;
 
 		public event Action<GameObject, Magnet> OnMagnetsJoined;
-
-		public MoveControllerNoVR movementController;
 
 		public enum STATUS
 		{
@@ -40,7 +36,7 @@ namespace fb.fixit
 			baseMagnetToJoin = null;
 			movingMagnetToJoin = null;
 
-			limitTrigger.OnLimitTriggered += HandleLimitTriggered;
+
 		}
 
 		public void OnDisable ()
@@ -102,11 +98,6 @@ namespace fb.fixit
 			if (OnMagnetsJoined != null)
 				OnMagnetsJoined (movingMagnetToJoin.transform.parent.gameObject, baseMagnetToJoin);
 		}
-
-		private void HandleLimitTriggered (GameObject movingObject, GameObject staticObject)
-		{
-			if (staticObject.name.Equals ("Ground"))
-				movementController.DeselectObject ();
-		}
+	
 	}
 }

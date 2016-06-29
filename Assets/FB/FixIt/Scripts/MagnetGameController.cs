@@ -10,7 +10,7 @@ namespace fb.fixit
 	{
 		private MagnetController magnetController;
 
-		public AbsMovementController movementController;
+		public MoveControllerNoVR movementController;
 
 		public GameObject baseObject;
 
@@ -66,6 +66,7 @@ namespace fb.fixit
 
 		private void HandleObjectSelected (GameObject selected)
 		{
+			selected.GetComponent<LimitTrigger> ().OnLimitTriggered += HandleLimitTriggered;
 			List<MagnetMatch> matches = MagnetMatcher.findMatches (baseObject, selected);
 			if (matches.Count > 0) {
 				magnetController.matches = matches;
@@ -77,6 +78,7 @@ namespace fb.fixit
 
 		private void HandleObjectDeselected (GameObject deselected)
 		{
+			deselected.GetComponent<LimitTrigger> ().OnLimitTriggered -= HandleLimitTriggered;
 			deselected.GetComponent<Collider> ().isTrigger = false;
 			magnetController.enabled = false;
 		}
@@ -87,6 +89,12 @@ namespace fb.fixit
 				victoryText.text = "WELL DONE!";
 
 			AudioSource.PlayClipAtPoint (victorySound, Camera.main.transform.position);
+		}
+
+		private void HandleLimitTriggered (GameObject movingObject, GameObject staticObject)
+		{
+			if (staticObject.name.Equals ("Ground") || staticObject.name.Equals ("Core"))
+				movementController.DeselectObject ();
 		}
 	}
 }
