@@ -5,13 +5,16 @@ using System.Collections.Generic;
 
 namespace fb.fixit
 {
+	// Takes care of the game flow by managing the interactions between the movement and magnet controllers, and by updating the UI.
 	[RequireComponent (typeof(MagnetController))]
 	public class MagnetGameController : MonoBehaviour
 	{
 		private MagnetController magnetController;
 
+		// FIXME should abstract here
 		public MoveControllerNoVR movementController;
 
+		// the complete base object, with its parts disabled at the start
 		public GameObject baseObject;
 
 		public AudioClip lockSound;
@@ -20,6 +23,8 @@ namespace fb.fixit
 
 		public Text victoryText;
 
+		// here goes a complete list of all the possible combinations between base magnets and base parts
+		// e.g.: the right wrist magnet on the base is connected to the right fist base part
 		public BaseObjectByMagnet[] baseObjectsByMagnet;
 
 		void Awake ()
@@ -35,14 +40,19 @@ namespace fb.fixit
 				victoryText.text = "";
 		}
 
+		// Whenever two magnets have been joined, the moving part is hidden and a corresponding static base part takes
+		// its place, so as to avoid displaying imperfect connections with space in between, wrong angles, etc.
 		private void HandleMagnetsJoined (GameObject joinedPart, Magnet baseMagnetJoined)
 		{
 			magnetController.enabled = false;
 
 			AudioSource.PlayClipAtPoint (lockSound, Camera.main.transform.position);
 
+			// the moving part is immediately hidden and removed from the game
 			joinedPart.SetActive (false);
 
+			// searches for a correspondance between the base magnet which has been connected and the array of
+			// possible matches, so that it can reach the relevant disabled base part and enable it 
 			GameObject basePart = null;
 			foreach (BaseObjectByMagnet baseObjectByMagnet in baseObjectsByMagnet) {
 				if (baseObjectByMagnet.baseMagnet == baseMagnetJoined) {
@@ -50,9 +60,9 @@ namespace fb.fixit
 					break;
 				}
 			}
-
 			basePart.SetActive (true);
 
+			// if all the base parts are now active, the game is over
 			bool allBasePartsActive = true;
 			foreach (Transform child in baseObject.transform) {
 				if (!child.gameObject.activeSelf) {
@@ -66,11 +76,15 @@ namespace fb.fixit
 
 		private void HandleObjectSelected (GameObject selected)
 		{
+			// the controller now listens to collisions between the moving kinematic part and the other objects
 			selected.GetComponent<LimitTrigger> ().OnLimitTriggered += HandleLimitTriggered;
+			// finds all the possible matches between the moving part magnets and the base magnets
+			// (which are then passed on to the MagnetController)
 			List<MagnetMatch> matches = MagnetMatcher.findMatches (baseObject, selected);
 			if (matches.Count > 0) {
 				magnetController.matches = matches;
 				magnetController.status = MagnetController.STATUS.NORMAL;
+				// FIXME?
 				selected.GetComponent<Collider> ().isTrigger = true;
 				magnetController.enabled = true;
 			}
@@ -78,7 +92,9 @@ namespace fb.fixit
 
 		private void HandleObjectDeselected (GameObject deselected)
 		{
+			// the controller doesn't listen anymore to collisions between the ex moving part and the other objects
 			deselected.GetComponent<LimitTrigger> ().OnLimitTriggered -= HandleLimitTriggered;
+			// FIXME?
 			deselected.GetComponent<Collider> ().isTrigger = false;
 			magnetController.enabled = false;
 		}
@@ -91,8 +107,11 @@ namespace fb.fixit
 			AudioSource.PlayClipAtPoint (victorySound, Camera.main.transform.position);
 		}
 
+		// Whenever the moving part hits the core of another object (not the object itself, because there must be
+		// some margin to allow a connection), it must be deselected
 		private void HandleLimitTriggered (GameObject movingObject, GameObject staticObject)
 		{
+			// FIXME
 			if (staticObject.name.Equals ("Ground") || staticObject.name.Equals ("Core"))
 				movementController.DeselectObject ();
 		}
