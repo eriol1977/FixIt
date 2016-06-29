@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace fb.fixit
 {
+	// Abstract movement controller
 	public class AbsMovementController : MonoBehaviour
 	{
 		public event Action<GameObject> ObjectSelected;
