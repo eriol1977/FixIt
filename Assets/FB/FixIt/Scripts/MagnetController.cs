@@ -23,17 +23,15 @@ namespace fb.fixit
 		// minimum rotation difference between magnets to estabilish a connection
 		private Vector3 rotationThreshold = new Vector3 (5, 5, 5);
 
-		// event sent when two magnets are joining (FIXME: still used?)
-		public event Action OnMagnetsJoining;
-
 		// event sent when two magnets have been connected
 		public event Action<GameObject, Magnet> OnMagnetsJoined;
 
 		public enum STATUS
 		{
-			NORMAL, // when trying to find a connection
-			JOINING, // when joining two magnets (FIXME: still used?)
-			JOINED // when two magnets have been connected
+			NORMAL,
+			// when trying to find a connection
+			JOINED
+			// when two magnets have been connected
 		}
 
 		// present status
@@ -64,20 +62,14 @@ namespace fb.fixit
 						if (checkDistance (baseMagnet, match.movingMagnet) && checkRotation (baseMagnet, match.movingMagnet)) {
 							// disables the moving part collider to avoid collisions while joining magnets
 							match.movingMagnet.transform.parent.GetComponent<Collider> ().enabled = false;
-							
-							// FIXME: still useful?
-							if (OnMagnetsJoining != null)
-								OnMagnetsJoining ();
-
 							baseMagnetToJoin = baseMagnet;
 							movingMagnetToJoin = match.movingMagnet;
-							status = STATUS.JOINING;
+							status = STATUS.JOINED;
 							break;
 						}
 					}
 				}
-			// FIXME: still useful?
-			} else if (status == STATUS.JOINING) {
+			} else if (status == STATUS.JOINED) {
 				joinMagnets ();
 			}
 		}
@@ -107,7 +99,7 @@ namespace fb.fixit
 			
 			return xOK && zOK;
 		}
-		
+
 		
 		private void joinMagnets ()
 		{

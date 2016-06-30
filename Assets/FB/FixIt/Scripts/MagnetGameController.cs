@@ -78,14 +78,14 @@ namespace fb.fixit
 		{
 			// the controller now listens to collisions between the moving kinematic part and the other objects
 			selected.GetComponent<LimitTrigger> ().OnLimitTriggered += HandleLimitTriggered;
+			// the moving part collider should trigger collisions with the other objects (since the part itself is kinematic)
+			selected.GetComponent<Collider> ().isTrigger = true;
 			// finds all the possible matches between the moving part magnets and the base magnets
 			// (which are then passed on to the MagnetController)
 			List<MagnetMatch> matches = MagnetMatcher.findMatches (baseObject, selected);
 			if (matches.Count > 0) {
 				magnetController.matches = matches;
 				magnetController.status = MagnetController.STATUS.NORMAL;
-				// FIXME?
-				selected.GetComponent<Collider> ().isTrigger = true;
 				magnetController.enabled = true;
 			}
 		}
@@ -94,7 +94,7 @@ namespace fb.fixit
 		{
 			// the controller doesn't listen anymore to collisions between the ex moving part and the other objects
 			deselected.GetComponent<LimitTrigger> ().OnLimitTriggered -= HandleLimitTriggered;
-			// FIXME?
+			// the ex moving part must react to physics collisions normally
 			deselected.GetComponent<Collider> ().isTrigger = false;
 			magnetController.enabled = false;
 		}
@@ -111,8 +111,7 @@ namespace fb.fixit
 		// some margin to allow a connection), it must be deselected
 		private void HandleLimitTriggered (GameObject movingObject, GameObject staticObject)
 		{
-			// FIXME
-			if (staticObject.name.Equals ("Ground") || staticObject.name.Equals ("Core"))
+			if (staticObject.name.Equals ("Core"))
 				movementController.DeselectObject ();
 		}
 	}

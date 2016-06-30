@@ -24,14 +24,12 @@ namespace fb.fixit
 
 		void OnEnable ()
 		{
-			// FIXME
-			magnetController.OnMagnetsJoining += HandleMagnetsJoining;
+			magnetController.OnMagnetsJoined += HandleMagnetsJoined;
 		}
 
 		void OnDisable ()
 		{
-			// FIXME
-			magnetController.OnMagnetsJoining -= HandleMagnetsJoining;
+			magnetController.OnMagnetsJoined -= HandleMagnetsJoined;
 		}
 
 		void Start ()
@@ -102,8 +100,7 @@ namespace fb.fixit
 			return mask;
 		}
 
-		// FIXME
-		private void HandleMagnetsJoining ()
+		private void HandleMagnetsJoined (GameObject joinedPart, Magnet baseMagnetJoined)
 		{
 			selected = null;
 			zoom = 3f;
