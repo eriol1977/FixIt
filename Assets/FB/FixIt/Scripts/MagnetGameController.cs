@@ -96,6 +96,9 @@ namespace fb.fixit
 			deselected.GetComponent<LimitTrigger> ().OnLimitTriggered -= HandleLimitTriggered;
 			// the ex moving part must react to physics collisions normally
 			deselected.GetComponent<Collider> ().isTrigger = false;
+			// this is to avoid violent reactions from other objects around
+			deselected.AddComponent<MassDecreaser> ();
+
 			magnetController.enabled = false;
 		}
 
