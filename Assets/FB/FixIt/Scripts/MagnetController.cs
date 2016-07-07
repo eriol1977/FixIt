@@ -18,10 +18,10 @@ namespace fb.fixit
 		public Magnet movingMagnetToJoin;
 
 		// minimum distance between magnets to estabilish a connection
-		private float distanceThreshold = 0.5f;
+		private float distanceThreshold = 0.8f;
 
 		// minimum rotation difference between magnets to estabilish a connection
-		private Vector3 rotationThreshold = new Vector3 (5, 5, 5);
+		private Vector3 rotationThreshold = new Vector3 (10, 10, 10);
 
 		// event sent when two magnets have been connected
 		public event Action<GameObject, Magnet> OnMagnetsJoined;

@@ -14,7 +14,7 @@ namespace fb.fixit
 	{
 		public MagnetController magnetController;
 
-		private GameObject selected;
+		public GameObject selected;
 
 		private float zoom;
 

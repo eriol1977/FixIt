@@ -76,6 +76,8 @@ namespace fb.fixit
 
 		private void HandleObjectSelected (GameObject selected)
 		{
+			selected.AddComponent<CameraVisibility> ().ObjectInvisible += HandleObjectInvisible;
+
 			// the controller now listens to collisions between the moving kinematic part and the other objects
 			selected.GetComponent<LimitTrigger> ().OnLimitTriggered += HandleLimitTriggered;
 			// the moving part collider should trigger collisions with the other objects (since the part itself is kinematic)
@@ -88,6 +90,17 @@ namespace fb.fixit
 				magnetController.status = MagnetController.STATUS.NORMAL;
 				magnetController.enabled = true;
 			}
+		}
+
+		private void HandleObjectInvisible (GameObject invisible)
+		{
+			Debug.Log (invisible.name);
+
+			// FIXME
+			if (invisible.Equals (movementController.selected))
+				movementController.DeselectObject ();
+
+			invisible.GetComponent<Rigidbody> ().position = new Vector3 (0, 8, 4);
 		}
 
 		private void HandleObjectDeselected (GameObject deselected)

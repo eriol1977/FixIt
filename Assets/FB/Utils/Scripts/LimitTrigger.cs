@@ -13,4 +13,9 @@ public class LimitTrigger : MonoBehaviour
 			OnLimitTriggered (gameObject, other.gameObject);
 	}
 
+	void OnBecameInvisible ()
+	{
+		Debug.Log ("Invisible");
+	}
+
 }
