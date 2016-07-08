@@ -38,6 +38,10 @@ namespace fb.fixit
 
 			if (victoryText != null)
 				victoryText.text = "";
+
+			CameraVisibility[] cameraVisibilityScripts = Object.FindObjectsOfType<CameraVisibility> ();
+			foreach (CameraVisibility camVis in cameraVisibilityScripts)
+				camVis.ObjectInvisible += HandleObjectInvisible;
 		}
 
 		// Whenever two magnets have been joined, the moving part is hidden and a corresponding static base part takes
@@ -76,10 +80,8 @@ namespace fb.fixit
 
 		private void HandleObjectSelected (GameObject selected)
 		{
-			selected.AddComponent<CameraVisibility> ().ObjectInvisible += HandleObjectInvisible;
-
 			// the controller now listens to collisions between the moving kinematic part and the other objects
-			selected.GetComponent<LimitTrigger> ().OnLimitTriggered += HandleLimitTriggered;
+			selected.AddComponent<LimitTrigger> ().OnLimitTriggered += HandleLimitTriggered;
 			// the moving part collider should trigger collisions with the other objects (since the part itself is kinematic)
 			selected.GetComponent<Collider> ().isTrigger = true;
 			// finds all the possible matches between the moving part magnets and the base magnets
@@ -94,12 +96,11 @@ namespace fb.fixit
 
 		private void HandleObjectInvisible (GameObject invisible)
 		{
-			Debug.Log (invisible.name);
-
 			// FIXME
 			if (invisible.Equals (movementController.selected))
 				movementController.DeselectObject ();
 
+			invisible.GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			invisible.GetComponent<Rigidbody> ().position = new Vector3 (0, 8, 4);
 		}
 
@@ -107,6 +108,7 @@ namespace fb.fixit
 		{
 			// the controller doesn't listen anymore to collisions between the ex moving part and the other objects
 			deselected.GetComponent<LimitTrigger> ().OnLimitTriggered -= HandleLimitTriggered;
+			Destroy (deselected.GetComponent<LimitTrigger> ());
 			// the ex moving part must react to physics collisions normally
 			deselected.GetComponent<Collider> ().isTrigger = false;
 			// this is to avoid violent reactions from other objects around

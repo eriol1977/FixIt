@@ -12,10 +12,4 @@ public class LimitTrigger : MonoBehaviour
 		if (OnLimitTriggered != null)
 			OnLimitTriggered (gameObject, other.gameObject);
 	}
-
-	void OnBecameInvisible ()
-	{
-		Debug.Log ("Invisible");
-	}
-
 }

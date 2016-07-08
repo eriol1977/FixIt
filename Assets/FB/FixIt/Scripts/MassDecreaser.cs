@@ -9,11 +9,13 @@ public class MassDecreaser : MonoBehaviour
 
 	private float originalMass;
 
-	public float timeToWait = 2f;
+	private float timeToWait = 2f;
 
 	private float endTime;
 
 	private float decreaseFactor = 1000f;
+
+	private float maxSpeedAfterCollision = 1f;
 
 	void Awake ()
 	{
@@ -29,5 +31,10 @@ public class MassDecreaser : MonoBehaviour
 			rb.mass = originalMass;
 			Destroy (this);
 		}
+	}
+
+	void OnCollisionEnter (Collision other)
+	{
+		rb.velocity = Vector3.ClampMagnitude (rb.velocity, maxSpeedAfterCollision);
 	}
 }
