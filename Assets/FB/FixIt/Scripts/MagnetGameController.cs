@@ -11,8 +11,7 @@ namespace fb.fixit
 	{
 		private MagnetController magnetController;
 
-		// FIXME should abstract here
-		public MoveControllerNoVR movementController;
+		public AbsMovementController movementController;
 
 		// the complete base object, with its parts disabled at the start
 		public GameObject baseObject;
@@ -96,9 +95,7 @@ namespace fb.fixit
 
 		private void HandleObjectInvisible (GameObject invisible)
 		{
-			// FIXME
-			if (invisible.Equals (movementController.selected))
-				movementController.DeselectObject ();
+			movementController.DeselectObject (invisible);
 
 			invisible.GetComponent<Rigidbody> ().velocity = Vector3.zero;
 			invisible.GetComponent<Rigidbody> ().position = new Vector3 (0, 8, 4);
@@ -125,12 +122,10 @@ namespace fb.fixit
 			AudioSource.PlayClipAtPoint (victorySound, Camera.main.transform.position);
 		}
 
-		// Whenever the moving part hits the core of another object (not the object itself, because there must be
-		// some margin to allow a connection), it must be deselected
+		// Whenever the moving part hits another object, it must be deselected
 		private void HandleLimitTriggered (GameObject movingObject, GameObject staticObject)
 		{
-			if (staticObject.name.Equals ("Core"))
-				movementController.DeselectObject ();
+			movementController.DeselectObject (movingObject);
 		}
 	}
 }

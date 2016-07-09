@@ -14,7 +14,7 @@ namespace fb.fixit
 	{
 		public MagnetController magnetController;
 
-		public GameObject selected;
+		private GameObject selected;
 
 		private float zoom;
 
@@ -76,13 +76,13 @@ namespace fb.fixit
 				}
 			}
 			if (Input.GetMouseButtonDown (1) && selected != null) {
-				DeselectObject ();
+				DeselectObject (selected);
 			}
 		}
 
-		public void DeselectObject ()
+		public override void DeselectObject (GameObject obj)
 		{
-			if (selected != null) {
+			if (selected != null && selected == obj) {
 				// the deselected object turns not kinematic so that it falls and responds to physical forces
 				selected.GetComponent<Rigidbody> ().isKinematic = false;
 				OnObjectDeselected (selected);

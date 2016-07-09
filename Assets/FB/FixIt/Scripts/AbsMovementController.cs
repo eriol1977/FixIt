@@ -4,7 +4,7 @@ using UnityEngine;
 namespace fb.fixit
 {
 	// Abstract movement controller
-	public class AbsMovementController : MonoBehaviour
+	public abstract class AbsMovementController : MonoBehaviour
 	{
 		public event Action<GameObject> ObjectSelected;
 
@@ -21,5 +21,7 @@ namespace fb.fixit
 			if (ObjectDeselected != null)
 				ObjectDeselected (deselected);
 		}
+
+		public abstract void DeselectObject (GameObject obj);
 	}
 }
