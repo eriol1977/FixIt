@@ -55,15 +55,13 @@ namespace fb.fixit
 
 		private void ManageMovement ()
 		{
-			Vector3 pos = Input.mousePosition;
-			pos.z = zoom;
-			pos = Camera.main.ScreenToWorldPoint (pos);
-
-			CalculateZoom ();
-
-			selected.transform.position = pos;
+			selected.transform.position = GetWorldInputPosition ();
 			selected.transform.Rotate (CalculateRotationAngle () * Time.deltaTime * rotationSpeed, Space.World);
+			
+			CalculateZoom ();
 		}
+
+		protected abstract Vector3 GetWorldInputPosition ();
 
 		protected abstract void CalculateZoom ();
 
