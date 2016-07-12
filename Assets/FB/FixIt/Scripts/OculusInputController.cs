@@ -15,19 +15,16 @@ namespace fb.fixit
 		protected override void ManageSelection ()
 		{
 			if (OVRInput.GetDown (OVRInput.Button.One)) {
-				// TODO inform here the gaze target position, based on Oculus tracking!
-				SelectFromInputDevice (Input.mousePosition); 
+				SelectFromInputDevice (); 
 			} else if (OVRInput.GetDown (OVRInput.Button.Two)) {
 				DeselectFromInputDevice ();
 			}
 		}
 
-		protected override Vector3 GetWorldInputPosition ()
+		protected override Vector2 GetScreenInputPosition ()
 		{
-			// TODO inform here the gaze world position, based on Oculus tracking!
-		        Vector3 pos = Input.mousePosition;
-			pos.z = zoom;
-			pos = Camera.main.ScreenToWorldPoint (pos);
+			// TODO inform here the gaze screen position, based on Oculus tracking!
+		       return Input.mousePosition;
 		}
 
 		protected override void CalculateZoom ()
