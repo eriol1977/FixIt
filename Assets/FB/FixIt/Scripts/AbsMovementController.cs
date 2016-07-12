@@ -55,13 +55,17 @@ namespace fb.fixit
 
 		private void ManageMovement ()
 		{
-			selected.transform.position = GetWorldInputPosition ();
+			Vector3 pos = GetScreenInputPosition ();
+			pos.z = zoom;
+			pos = Camera.main.ScreenToWorldPoint (pos);
+			
+			selected.transform.position = pos;
 			selected.transform.Rotate (CalculateRotationAngle () * Time.deltaTime * rotationSpeed, Space.World);
 			
 			CalculateZoom ();
 		}
 
-		protected abstract Vector3 GetWorldInputPosition ();
+		protected abstract Vector3 GetScreenInputPosition ();
 
 		protected abstract void CalculateZoom ();
 
@@ -92,10 +96,10 @@ namespace fb.fixit
 			zoom = 3f;
 		}
 
-		protected void SelectFromInputDevice (Vector3 pos)
+		protected void SelectFromInputDevice ()
 		{
 			if (selected == null) {
-				Ray rayOrigin = Camera.main.ScreenPointToRay (pos);
+				Ray rayOrigin = Camera.main.ScreenPointToRay (GetScreenInputPosition());
 				RaycastHit hit;
 				if (Physics.Raycast (rayOrigin, out hit, 200f, GetLayerMask ("Selectable"))) {
 					SelectObject (hit.collider.gameObject);
