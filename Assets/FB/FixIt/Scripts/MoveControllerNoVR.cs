@@ -12,98 +12,28 @@ namespace fb.fixit
 	// - the arrow keys rotate the selected object around two of its axes
 	public class MoveControllerNoVR : AbsMovementController
 	{
-		public MagnetController magnetController;
-
-		private GameObject selected;
-
-		private float zoom;
-
-		private float zoomStep = 0.2f;
-
-		private float rotationSpeed = 100f;
-
-		void OnEnable ()
+		protected override void ManageSelection ()
 		{
-			magnetController.OnMagnetsJoined += HandleMagnetsJoined;
-		}
-
-		void OnDisable ()
-		{
-			magnetController.OnMagnetsJoined -= HandleMagnetsJoined;
-		}
-
-		void Start ()
-		{
-			zoom = 3f;
-		}
-
-		void Update ()
-		{
-			SelectObject ();
-
-			if (selected != null) {
-				Vector3 mp = Input.mousePosition;
-				mp.z = zoom;
-				mp = Camera.main.ScreenToWorldPoint (mp);
-
-
-				var wheel = Input.GetAxis ("Mouse ScrollWheel");
-				if (wheel > 0f) {
-					zoom += zoomStep;
-				} else if (wheel < 0f) {
-					zoom -= zoomStep;
-				}
-				
-				selected.transform.position = mp;
-
-				selected.transform.Rotate (new Vector3 (Input.GetAxis ("Vertical"), 0, -Input.GetAxis ("Horizontal")) * Time.deltaTime * rotationSpeed, Space.World);
-			}
-
-		}
-
-		void SelectObject ()
-		{
-			if (Input.GetMouseButtonDown (0) && selected == null) {
-				Ray rayOrigin = Camera.main.ScreenPointToRay (Input.mousePosition);
-				RaycastHit hit;
-				if (Physics.Raycast (rayOrigin, out hit, 200f, GetLayerMask ("Selectable"))) {
-					selected = hit.collider.gameObject;
-					
-					// the selected object turns kinematic so that we can move it around
-					selected.GetComponent<Rigidbody> ().isKinematic = true;
-
-					OnObjectSelected (selected);
-				}
-			}
-			if (Input.GetMouseButtonDown (1) && selected != null) {
-				DeselectObject (selected);
+			if (Input.GetMouseButtonDown (0)) {
+				SelectFromInputDevice (Input.mousePosition);
+			} else if (Input.GetMouseButtonDown (1)) {
+				DeselectFromInputDevice ();
 			}
 		}
 
-		public override void DeselectObject (GameObject obj)
+		protected override void CalculateZoom ()
 		{
-			if (selected != null && selected == obj) {
-				// the deselected object turns not kinematic so that it falls and responds to physical forces
-				selected.GetComponent<Rigidbody> ().isKinematic = false;
-				OnObjectDeselected (selected);
-				selected = null;
-				zoom = 3f;
+			var wheel = Input.GetAxis ("Mouse ScrollWheel");
+			if (wheel > 0f) {
+				zoom += zoomStep;
+			} else if (wheel < 0f) {
+				zoom -= zoomStep;
 			}
 		}
 
-		private static int GetLayerMask (params string[] layerNames)
+		protected override Vector3 CalculateRotationAngle ()
 		{
-			int mask = 0;
-			for (int i = 0; i < layerNames.Length; i++) {
-				mask = mask | 1 << LayerMask.NameToLayer (layerNames [i]);
-			}
-			return mask;
-		}
-
-		private void HandleMagnetsJoined (GameObject joinedPart, Magnet baseMagnetJoined)
-		{
-			selected = null;
-			zoom = 3f;
+			return new Vector3 (Input.GetAxis ("Vertical"), 0, -Input.GetAxis ("Horizontal"));
 		}
 	}
 }
