@@ -21,7 +21,7 @@ namespace fb.fixit
 			}
 		}
 
-		protected override Vector2 GetScreenInputPosition ()
+		protected override Vector3 GetScreenInputPosition ()
 		{
 		        return Input.mousePosition;
 		}
