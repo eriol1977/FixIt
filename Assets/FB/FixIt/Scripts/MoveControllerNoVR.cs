@@ -21,6 +21,13 @@ namespace fb.fixit
 			}
 		}
 
+		protected override Vector3 GetWorldInputPosition ()
+		{
+		        Vector3 pos = Input.mousePosition;
+			pos.z = zoom;
+			pos = Camera.main.ScreenToWorldPoint (pos);
+		}
+	
 		protected override void CalculateZoom ()
 		{
 			var wheel = Input.GetAxis ("Mouse ScrollWheel");
