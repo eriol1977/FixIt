@@ -21,7 +21,7 @@ namespace fb.fixit
 			}
 		}
 
-		protected override Vector2 GetScreenInputPosition ()
+		protected override Vector3 GetScreenInputPosition ()
 		{
 			// TODO inform here the gaze screen position, based on Oculus tracking!
 		       return Input.mousePosition;
