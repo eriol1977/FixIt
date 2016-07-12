@@ -15,17 +15,15 @@ namespace fb.fixit
 		protected override void ManageSelection ()
 		{
 			if (Input.GetMouseButtonDown (0)) {
-				SelectFromInputDevice (Input.mousePosition);
+				SelectFromInputDevice ();
 			} else if (Input.GetMouseButtonDown (1)) {
 				DeselectFromInputDevice ();
 			}
 		}
 
-		protected override Vector3 GetWorldInputPosition ()
+		protected override Vector3 GetScreenInputPosition ()
 		{
-		        Vector3 pos = Input.mousePosition;
-			pos.z = zoom;
-			pos = Camera.main.ScreenToWorldPoint (pos);
+		        return Input.mousePosition;
 		}
 	
 		protected override void CalculateZoom ()
