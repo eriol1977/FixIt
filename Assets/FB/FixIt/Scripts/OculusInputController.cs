@@ -24,7 +24,10 @@ namespace fb.fixit
 		protected override Vector3 GetScreenInputPosition ()
 		{
 			// TODO inform here the gaze screen position, based on Oculus tracking!
-		       return Input.mousePosition;
+			// Could this be ok, if we consider the center of the screen as the "looked at" point
+			// of the camera, which in turn moves along with the head?
+			// test by moving the camera with a mouse script
+			return new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane);
 		}
 
 		protected override void CalculateZoom ()
