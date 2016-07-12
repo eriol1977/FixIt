@@ -22,6 +22,14 @@ namespace fb.fixit
 			}
 		}
 
+		protected override Vector3 GetWorldInputPosition ()
+		{
+			// TODO inform here the gaze world position, based on Oculus tracking!
+		        Vector3 pos = Input.mousePosition;
+			pos.z = zoom;
+			pos = Camera.main.ScreenToWorldPoint (pos);
+		}
+
 		protected override void CalculateZoom ()
 		{
 			if (OVRInput.Get (OVRInput.Axis1D.PrimaryIndexTrigger) == 1.0f) {
