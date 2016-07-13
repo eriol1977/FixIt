@@ -2,27 +2,29 @@
 using System;
 using System.Collections;
 
-public class CameraVisibility : MonoBehaviour
+namespace fb.utils
 {
-	private Collider anObjCollider;
-	private Camera cam;
-	private Plane[] planes;
-
-	public event Action<GameObject> ObjectInvisible;
-
-	void Start ()
+	public class CameraVisibility : MonoBehaviour
 	{
-		cam = Camera.main;
-		planes = GeometryUtility.CalculateFrustumPlanes (cam);
-		anObjCollider = GetComponent<Collider> ();
-	}
+		private Collider anObjCollider;
+		private Camera cam;
+		private Plane[] planes;
 
-	void Update ()
-	{
-		if (!GeometryUtility.TestPlanesAABB (planes, anObjCollider.bounds)) {
-			if (ObjectInvisible != null)
-				ObjectInvisible (gameObject);
+		public event Action<GameObject> ObjectInvisible;
+
+		void Start ()
+		{
+			cam = Camera.main;
+			planes = GeometryUtility.CalculateFrustumPlanes (cam);
+			anObjCollider = GetComponent<Collider> ();
+		}
+
+		void Update ()
+		{
+			if (!GeometryUtility.TestPlanesAABB (planes, anObjCollider.bounds)) {
+				if (ObjectInvisible != null)
+					ObjectInvisible (gameObject);
+			}
 		}
 	}
-
 }

@@ -10,6 +10,7 @@ namespace fb.fixit
 	// - moving the head with an object selected moves the object around
 	// - pressing the triggers with an object selected moves the object along the Z axis
 	// - the primary thumbstick rotates the selected object around two of its axes
+	// NB: needs OVRManager component in scene (eg: on Main Camera) to work!
 	public class OculusInputController : AbsMovementController
 	{
 		protected override void ManageSelection ()
@@ -23,18 +24,14 @@ namespace fb.fixit
 
 		protected override Vector3 GetScreenInputPosition ()
 		{
-			// TODO inform here the gaze screen position, based on Oculus tracking!
-			// Could this be ok, if we consider the center of the screen as the "looked at" point
-			// of the camera, which in turn moves along with the head?
-			// test by moving the camera with a mouse script
-			return new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane);
+			return new Vector3 (Screen.width / 2, Screen.height / 2, Camera.main.nearClipPlane);
 		}
 
 		protected override void CalculateZoom ()
 		{
-			if (OVRInput.Get (OVRInput.Axis1D.PrimaryIndexTrigger) == 1.0f) {
+			if (OVRInput.Get (OVRInput.Axis1D.SecondaryIndexTrigger) == 1.0f) {
 				zoom += zoomStep;
-			} else if (OVRInput.Get (OVRInput.Axis1D.SecondaryIndexTrigger) == 1.0f) {
+			} else if (OVRInput.Get (OVRInput.Axis1D.PrimaryIndexTrigger) == 1.0f) {
 				zoom -= zoomStep;
 			}
 		}

@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using fb.utils;
 
 namespace fb.fixit
 {
@@ -38,9 +39,9 @@ namespace fb.fixit
 			if (victoryText != null)
 				victoryText.text = "";
 
-			CameraVisibility[] cameraVisibilityScripts = Object.FindObjectsOfType<CameraVisibility> ();
-			foreach (CameraVisibility camVis in cameraVisibilityScripts)
-				camVis.ObjectInvisible += HandleObjectInvisible;
+//			CameraVisibility[] cameraVisibilityScripts = Object.FindObjectsOfType<CameraVisibility> ();
+//			foreach (CameraVisibility camVis in cameraVisibilityScripts)
+//				camVis.ObjectInvisible += HandleObjectInvisible;
 		}
 
 		// Whenever two magnets have been joined, the moving part is hidden and a corresponding static base part takes
