@@ -20,6 +20,9 @@ namespace fb.fixit
 
 		public event Action<GameObject> ObjectDeselected;
 
+		// if set to true, a selected object keeps following the input controller, but no rotation or zooming is applied
+		public bool suspendInput = false;
+
 		protected virtual void OnObjectSelected (GameObject selected)
 		{
 			if (ObjectSelected != null)
@@ -58,11 +61,12 @@ namespace fb.fixit
 			Vector3 pos = GetScreenInputPosition ();
 			pos.z = zoom;
 			pos = Camera.main.ScreenToWorldPoint (pos);
-			
 			selected.transform.position = pos;
-			selected.transform.Rotate (CalculateRotationAngle () * Time.deltaTime * rotationSpeed, Space.World);
-			
-			CalculateZoom ();
+
+			if (!suspendInput) {
+				selected.transform.Rotate (CalculateRotationAngle () * Time.deltaTime * rotationSpeed, Space.World);
+				CalculateZoom ();
+			}
 		}
 
 		protected abstract Vector3 GetScreenInputPosition ();
@@ -99,7 +103,7 @@ namespace fb.fixit
 		protected void SelectFromInputDevice ()
 		{
 			if (selected == null) {
-				Ray rayOrigin = Camera.main.ScreenPointToRay (GetScreenInputPosition());
+				Ray rayOrigin = Camera.main.ScreenPointToRay (GetScreenInputPosition ());
 				RaycastHit hit;
 				if (Physics.Raycast (rayOrigin, out hit, 200f, GetLayerMask ("Selectable"))) {
 					SelectObject (hit.collider.gameObject);

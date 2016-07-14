@@ -4,6 +4,8 @@ using fb.utils;
 
 namespace fb.fixit
 {
+	// Moves both the camera and the objects by means of an Xbox controller.
+	// While moving the camera, actions on the selected object are suspended (it just follows the camera).
 	public class XboxCameraCtrl : MoveCameraWithXboxCtrl
 	{
 		private OculusInputController inputCtrl;
@@ -15,7 +17,17 @@ namespace fb.fixit
 
 		private void manageInputCtrl (bool activate)
 		{
-			inputCtrl.enabled = activate;
+			inputCtrl.suspendInput = activate;
+		}
+
+		protected override void OnCameraMovementStarted ()
+		{
+			manageInputCtrl (true);
+		}
+
+		protected override void OnCameraMovementEnded ()
+		{
+			manageInputCtrl (false);
 		}
 	}
 }

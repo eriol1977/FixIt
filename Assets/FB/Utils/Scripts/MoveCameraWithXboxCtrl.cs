@@ -6,9 +6,9 @@ namespace fb.utils
 	// NB: needs OVRManager component in scene (eg: on Main Camera) to work!
 	public class MoveCameraWithXboxCtrl : MonoBehaviour
 	{
-		public float turnSpeed = 1.0f;
-		public float panSpeed = 1.0f;
-		public float zoomSpeed = 1.0f;
+		public float turnSpeed = 0.5f;
+		public float panSpeed = 0.2f;
+		public float zoomSpeed = 0.5f;
 
 		private bool isMoving = false;
 
@@ -16,10 +16,12 @@ namespace fb.utils
 		{
 			if (OVRInput.GetDown (OVRInput.Button.PrimaryShoulder)) {
 				isMoving = true;
+				OnCameraMovementStarted ();
 			}
 
 			if (OVRInput.GetUp (OVRInput.Button.PrimaryShoulder)) {
 				isMoving = false;
+				OnCameraMovementEnded ();
 			}
 
 
@@ -40,6 +42,16 @@ namespace fb.utils
 				}
 			}
 
+		}
+
+		protected virtual void OnCameraMovementStarted ()
+		{
+			// do nothing: child classes can implement it if useful
+		}
+
+		protected virtual void OnCameraMovementEnded ()
+		{
+			// do nothing: child classes can implement it if useful
 		}
 	}
 }
